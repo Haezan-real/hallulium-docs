@@ -83,22 +83,27 @@ product model.
 
 ## Status
 
-- **Current phase:** shell hybrid — `hallu.exe` is the Electron host and
-  the Hallu launcher. Purge phases 01–14, DevTools, and password_manager
-  cuts are done.
-- **Last done:** Square proof passed (19 Nov 2026, 15:52): magenta
-  `(255, 43, 214)`, green `(57, 255, 20)`, cyan excluded (page
-  `(14, 3, 43)`). Liquid-glass script `bin/tests/hdcCapture.test.mjs` then
-  passed on the capture: under the time widget, viewer, media, tool,
-  timeline, background, a clip `(57, 255, 20)`, and the playneedle
-  `(0, 240, 255)` were in the picture, and a magenta marker on each spot
-  came back exact. The quad dump was removed and `out\Release\hallu.exe`
-  relinked at 16:14. `app/hallu.exe` was not replaced.
-- **Next action:** HDC loop. Read `docs/protocol.md` in this docs repo
-  first, every turn, including after a summary. The glass canvas read back
-  empty on the hidden test window; confirm those same pixels in
-  `.shader-torus` on a window whose GPU surface is presenting. Shrink the
-  host closure only while `hallu.exe` still launches the editor.
+- **Current phase:** stage 3 — cut linked-but-unused code, then rebuild
+  `hallu.exe`. Blink modules Hallu does not call are removed and the
+  Release host links and launches. Larger clusters (extensions, WebRTC,
+  autofill, pdfium, chrome, ANGLE, Dawn OpenGL) are still in the link.
+  Purge phases 01–14, DevTools, and password_manager source cuts are done.
+  `hallu.exe` is the Electron host and the Hallu launcher.
+- **Last done:** Blink-module cut (22 Nov 2026). Deleted the unused Blink
+  module directories from the stage-3 cut list (WebGL, WebRTC, service
+  worker, filesystem, CSS paint, shared storage, and the rest of that
+  cluster). Call sites in the remaining tree were rewired so the build
+  compiles without them. `ninja -C out/Release hallu.exe` succeeded.
+  The binary is 233.7 MB (was 250.7 MB). Launch check: Release
+  `hallu.exe` opened the editor at `http://localhost:5173/`, title Hallu,
+  `.widget-hub-ball` present, behind other windows. Node stays with V8.
+  Mac source was not deleted.
+- **Next action:** next stage-3 cluster is still unchosen (extensions,
+  WebRTC, autofill, pdfium, chrome are the largest). The HDC loop is
+  still open when that work resumes: read `docs/protocol.md` first.
+  The glass canvas read back empty on the hidden test window; confirm
+  those pixels in `.shader-torus` on a window whose GPU surface is
+  presenting.
 - **Blocked on:** nothing for launch
 
 ## Paths
