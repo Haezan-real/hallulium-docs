@@ -84,26 +84,29 @@ product model.
 ## Status
 
 - **Current phase:** stage 3 — cut linked-but-unused code, then rebuild
-  `hallu.exe`. Blink modules Hallu does not call are removed and the
-  Release host links and launches. Larger clusters (extensions, WebRTC,
-  autofill, pdfium, chrome, ANGLE, Dawn OpenGL) are still in the link.
-  Purge phases 01–14, DevTools, and password_manager source cuts are done.
-  `hallu.exe` is the Electron host and the Hallu launcher.
-- **Last done:** Blink-module cut (22 Nov 2026). Deleted the unused Blink
-  module directories from the stage-3 cut list (WebGL, WebRTC, service
-  worker, filesystem, CSS paint, shared storage, and the rest of that
-  cluster). Call sites in the remaining tree were rewired so the build
-  compiles without them. `ninja -C out/Release hallu.exe` succeeded.
-  The binary is 233.7 MB (was 250.7 MB). Launch check: Release
-  `hallu.exe` opened the editor at `http://localhost:5173/`, title Hallu,
-  `.widget-hub-ball` present, behind other windows. Node stays with V8.
-  Mac source was not deleted.
+  `hallu.exe`. Blink modules Hallu does not call are removed. The purged
+  GN shells (`android_webview`, `ash`, `apps`, `headless`, `rlz`,
+  `codelabs`, and the Hallulium stub `BUILD.gn` files) are removed, and
+  the Release host still links and launches. Larger clusters (extensions,
+  WebRTC, autofill, pdfium, chrome, ANGLE, Dawn OpenGL) are still in the
+  link. Purge phases 01–14, DevTools, and password_manager source cuts
+  are done. `hallu.exe` is the Electron host and the Hallu launcher.
+- **Last done:** Purged GN shells (23 Nov 2026). Deleted 532 stub GN
+  files, the empty folder trees they left, and the source-less
+  `android_webview`, `ash`, `apps`, `headless`, `rlz`, and `codelabs`
+  trees. Windows `gn gen` no longer imports those targets. View clip
+  paths are a Skia round rect, and the ChromeOS reven GPU switch is
+  gone with ash. `ninja -C out/Release hallu.exe` linked (245,024,256
+  bytes). Launch check: that binary opened the editor at
+  `http://localhost:5173/`, title Hallu, `.widget-hub-ball` present,
+  behind other windows, then closed. Node stays with V8. Mac source was
+  not deleted. `build_overrides` stayed.
 - **Next action:** next stage-3 cluster is still unchosen (extensions,
-  WebRTC, autofill, pdfium, chrome are the largest). The HDC loop is
-  still open when that work resumes: read `docs/protocol.md` first.
-  The glass canvas read back empty on the hidden test window; confirm
-  those pixels in `.shader-torus` on a window whose GPU surface is
-  presenting.
+  WebRTC, autofill, pdfium, chrome are the largest). When the HDC loop
+  resumes, read `docs/protocol.md` first. Re-check the per-element glass
+  on one Hallu window whose GPU surface is presenting: a widget between
+  two floating windows, the glass canvas at that widget's z, and that
+  canvas sampling the cutoff under it.
 - **Blocked on:** nothing for launch
 
 ## Paths
