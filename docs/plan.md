@@ -93,19 +93,19 @@ product model.
   WebRTC, autofill, pdfium, chrome, ANGLE, Dawn OpenGL) are still in the
   link. Purge phases 01–14, DevTools, and password_manager source cuts
   are done. `hallu.exe` is the Electron host and the Hallu launcher.
-- **Last done:** Phone-name cut (24 Nov 2026). Deleted 652 folders and
-  3,344 files whose names contain `android` or `ios` (false matches and
-  `chrome/android/` held back). Windows keepbacks restored from git:
-  `build/android`, libc++ iostream `ios` headers, Perfetto android
-  protos/stats, Skia `include/android`, `base/android`, media Android
-  overlay/audio, Blink Android CSS, iOS theme PNGs, and a few others.
-  Rust std `os/android` and `os/ios` sources unhooked (not restored).
-  Mac / Darwin / Cocoa / Metal source stayed. `ninja -C out/Release
-  hallu.exe` linked (245,024,768 bytes, 24 Nov 15:27). Launch check:
-  that binary opened the editor at `http://localhost:5173/`, title
-  Hallu, `.widget-hub-ball` present, behind other windows, then closed.
-  Size did not drop: those names were mostly not in the Windows link.
-  Inventory: `purge/android ios purge 2/`. Node stays with V8.
+- **Last done:** Hollow BUILD.gn trees (24 Nov 2026). Deleted
+  `chromeos/`, `chromecast/`, `fuchsia_web/`, `infra/`, `ui/chromeos/`,
+  `ui/file_manager/`, `components/chromeos_camera/`, and
+  `components/exo/` (GN shells after the sources were already gone).
+  Unhooked Windows GN imports (`on_device_model.gni`, webui dbus,
+  `tflite/features.gni`, root `gn_all` infra) and gated the
+  `chromeos_features.h` include in message-center constants. `ninja -C
+  out/Release hallu.exe` linked (245,024,768 bytes, 24 Nov 17:41).
+  Launch check: editor at `http://localhost:5173/`, title Hallu,
+  `.widget-hub-ball` present, then closed. Size did not drop; those
+  trees were not in the Windows link. Mac source stayed. Node stays
+  with V8. The 422k unused-file list was not deleted (Dawn/Skia/Node
+  still sit in it).
 - **Next action:** next stage-3 cluster is still unchosen (extensions,
   WebRTC, autofill, pdfium, chrome are the largest). When the HDC loop
   resumes, read `docs/protocol.md` first. Re-check the per-element glass
