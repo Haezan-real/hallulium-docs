@@ -86,21 +86,26 @@ product model.
 - **Current phase:** stage 3 — cut linked-but-unused code, then rebuild
   `hallu.exe`. Blink modules Hallu does not call are removed. The purged
   GN shells (`android_webview`, `ash`, `apps`, `headless`, `rlz`,
-  `codelabs`, and the Hallulium stub `BUILD.gn` files) are removed, and
-  the Release host still links and launches. Larger clusters (extensions,
+  `codelabs`, and the Hallulium stub `BUILD.gn` files) are removed. Phone
+  names (`android` / `ios` in the path) are cut except false matches,
+  `chrome/android/`, and files the Windows ninja graph still compiles.
+  The Release host still links and launches. Larger clusters (extensions,
   WebRTC, autofill, pdfium, chrome, ANGLE, Dawn OpenGL) are still in the
   link. Purge phases 01–14, DevTools, and password_manager source cuts
   are done. `hallu.exe` is the Electron host and the Hallu launcher.
-- **Last done:** Purged GN shells (23 Nov 2026). Deleted 532 stub GN
-  files, the empty folder trees they left, and the source-less
-  `android_webview`, `ash`, `apps`, `headless`, `rlz`, and `codelabs`
-  trees. Windows `gn gen` no longer imports those targets. View clip
-  paths are a Skia round rect, and the ChromeOS reven GPU switch is
-  gone with ash. `ninja -C out/Release hallu.exe` linked (245,024,256
-  bytes). Launch check: that binary opened the editor at
-  `http://localhost:5173/`, title Hallu, `.widget-hub-ball` present,
-  behind other windows, then closed. Node stays with V8. Mac source was
-  not deleted. `build_overrides` stayed.
+- **Last done:** Phone-name cut (24 Nov 2026). Deleted 652 folders and
+  3,344 files whose names contain `android` or `ios` (false matches and
+  `chrome/android/` held back). Windows keepbacks restored from git:
+  `build/android`, libc++ iostream `ios` headers, Perfetto android
+  protos/stats, Skia `include/android`, `base/android`, media Android
+  overlay/audio, Blink Android CSS, iOS theme PNGs, and a few others.
+  Rust std `os/android` and `os/ios` sources unhooked (not restored).
+  Mac / Darwin / Cocoa / Metal source stayed. `ninja -C out/Release
+  hallu.exe` linked (245,024,768 bytes, 24 Nov 15:27). Launch check:
+  that binary opened the editor at `http://localhost:5173/`, title
+  Hallu, `.widget-hub-ball` present, behind other windows, then closed.
+  Size did not drop: those names were mostly not in the Windows link.
+  Inventory: `purge/android ios purge 2/`. Node stays with V8.
 - **Next action:** next stage-3 cluster is still unchosen (extensions,
   WebRTC, autofill, pdfium, chrome are the largest). When the HDC loop
   resumes, read `docs/protocol.md` first. Re-check the per-element glass
