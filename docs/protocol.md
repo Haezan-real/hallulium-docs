@@ -24,22 +24,29 @@ Three DOM boxes, then sample the capture:
   cyan is **not** `(0, 229, 255)`.
 - Square proof passed on the decomposite build (19 Nov 2026, 15:52):
   green `(57, 255, 20)`, magenta `(255, 43, 214)`, cyan `(14, 3, 43)`
-  which is the page, not `(0, 229, 255)`.
+  which is the page, not `(0, 229, 255)`. Passed again on the capture-list
+  build (24 Nov 2026, 21:28): green `(59, 255, 21)`, magenta `(255, 43, 215)`,
+  cyan `(5, 1, 15)`.
+- `below` takes a number or a list. The first cutoff binds one client.
+  Later zs are negative on that same pipe. `haezansDomCapture.layers` is
+  true. Pictures are tagged `token >> 16`. A later `below` with more zs
+  appends; it does not rebind.
+- List proof (24 Nov 2026): `below([50, 250])` produced both pictures. A
+  z-index 200 orange box was missing at 50 and present at 250; cyan at
+  400 was in neither.
 - `DecompositeEffect` in `paint_artifact_compositor.cc` no longer folds an
   effect into a parent group whose used stacking z differs. That is what
   put the cyan box on its own quad so the cutoff could drop it. Leave that
   check in place.
-- Liquid-glass script passed on that binary (19 Nov 2026, 16:06). With the
-  time widget over each spot, the capture pixel was the thing underneath,
-  then became exact magenta `#ff2bd6` when a marker was placed under the
-  card: viewer, both media panels, tool, timeline panel, page background,
-  timeline, the clip `(57, 255, 20)` before the marker, and the playneedle
-  `(0, 240, 255)` before the marker. Those frames were forwarded into the
-  shader's callback. The `.shader-torus` canvas read back all zeros; it is
-  a WebGPU canvas on a window that is not in front.
-- The hit dump has been removed from `surface_aggregator.cc`. Relink
-  `hallu.exe` so the binary stops writing `hdc-quads.txt`. Do not copy
-  over `app\hallu.exe`.
+- Liquid-glass script passed on the decomposite build (19 Nov 2026, 16:06)
+  and again on the capture-list build (24 Nov 2026, 21:36). The time widget
+  over each spot, then a magenta marker at the widget's cutoff z: viewer,
+  both media panels, tool, timeline panel, page background, timeline, the
+  clip, and the playneedle each became `(255, 43, 215)`. The TEE keeps one
+  canvas per cutoff and samples the card's cutoff, not the last picture.
+  The `.shader-torus` canvas read back all zeros; the menu was closed.
+- Extra capture trees are built from the original pass list, then inserted
+  together. Capture passes are not cached. Do not copy over `app\hallu.exe`.
 
 ## Liquid-glass proof
 

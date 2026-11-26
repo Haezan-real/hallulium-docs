@@ -87,32 +87,58 @@ product model.
   `hallu.exe`. Blink modules Hallu does not call are removed. The purged
   GN shells (`android_webview`, `ash`, `apps`, `headless`, `rlz`,
   `codelabs`, and the Hallulium stub `BUILD.gn` files) are removed. Phone
-  names (`android` / `ios` in the path) are cut except false matches,
-  `chrome/android/`, and files the Windows ninja graph still compiles.
-  The Release host still links and launches. Larger clusters (extensions,
-  WebRTC, autofill, pdfium, chrome, ANGLE, Dawn OpenGL) are still in the
-  link. Purge phases 01–14, DevTools, and password_manager source cuts
-  are done. `hallu.exe` is the Electron host and the Hallu launcher.
-- **Last done:** Hollow BUILD.gn trees (24 Nov 2026). Deleted
-  `chromeos/`, `chromecast/`, `fuchsia_web/`, `infra/`, `ui/chromeos/`,
-  `ui/file_manager/`, `components/chromeos_camera/`, and
-  `components/exo/` (GN shells after the sources were already gone).
-  Unhooked Windows GN imports (`on_device_model.gni`, webui dbus,
-  `tflite/features.gni`, root `gn_all` infra) and gated the
-  `chromeos_features.h` include in message-center constants. `ninja -C
-  out/Release hallu.exe` linked (245,024,768 bytes, 24 Nov 17:41).
-  Launch check: editor at `http://localhost:5173/`, title Hallu,
-  `.widget-hub-ball` present, then closed. Size did not drop; those
-  trees were not in the Windows link. Mac source stayed. Node stays
-  with V8. The 422k unused-file list was not deleted (Dawn/Skia/Node
-  still sit in it).
+  names (`android` / `ios` in the path) are cut except false matches
+  and files the Windows ninja graph still compiles. Checkout fat
+  (`remoting/`, `chrome/android/`, `chrome/test/`, `content/test/`,
+  tensorflow junctions, src-root orphans) is gone. The Release host
+  still links and launches. Larger clusters (extensions, WebRTC,
+  autofill, pdfium, chrome, ANGLE, Dawn OpenGL) are still in the link.
+  Purge phases 01–14, DevTools, and password_manager source cuts are
+  done. `hallu.exe` is the Electron host and the Hallu launcher.
+- **Last done:** HaezanGL host copied into `app/` (25 Nov 2026, 19:55).
+  Rebuilt `hallu.exe` (245,026,304) with `navigator.haezanGL` /
+  `getContext('haezangl')` as aliases of `gpu` / `'webgpu'`. Synced exe,
+  DLLs, paks, locales, `v8_context_snapshot.bin`, and `default_app.asar`
+  (hash match vs Release). Live probe: `haezanGL` object, same as `gpu`,
+  both context ids return the same object, `layers` true, `append` true.
+  White-screen gate passed (0% white) on `app/hallu.exe`. Did not start
+  Stage 4 C.
+  Prior: Stage 4 A2 in Hallu `bin/` (25 Nov 2026). One
+  widget-sized WebGPU canvas per card (project-info) and one for the wow,
+  each with its own stacking z and HDC cutoff. The wow canvas sits on the
+  0×0 anchor and follows the hub box (ball→bar→open). Liquid glass is
+  drawn in the torus program's window buffers and cropped onto the card
+  (`iTorusRect`). Hide-background isolation keeps glass on the cards; the
+  viewer is not a black punch. White-screen gate passed (0% white) on
+  `app/hallu.exe`. Did not copy `app/`.
+  Prior: Glass capture list (24 Nov 2026). One `below()` call
+  keeps a picture per cutoff. The renderer sends `captureCutoffs()` (torus
+  138, then each card z minus one). Extra zs are negative on the same
+  client; a second `Bind()` used to kill the renderer. Capture trees are
+  built from the original pass list then inserted together.
+  `hallu.exe` linked 245,026,816 (24 Nov 21:28). Square proof: green
+  `(59, 255, 21)`, magenta `(255, 43, 215)`, cyan `(5, 1, 15)`. List
+  proof: `below([50, 250])` tagged both pictures; orange at z 200 only
+  in 250. Liquid-glass: cyberpunk time widget over viewer, both media
+  panels, tool, timeline panel, background, timeline, clip, playneedle;
+  each cutoff picture went to `(255, 43, 215)` with the marker at the
+  card's cutoff z. Tested `out\Release\hallu.exe`. Did not copy `app/`.
 - **Next action:** next stage-3 cluster is still unchosen (extensions,
-  WebRTC, autofill, pdfium, chrome are the largest). When the HDC loop
-  resumes, read `docs/protocol.md` first. Re-check the per-element glass
-  on one Hallu window whose GPU surface is presenting: a widget between
-  two floating windows, the glass canvas at that widget's z, and that
-  canvas sampling the cutoff under it.
+  WebRTC, autofill, pdfium, chrome are the largest). Remaining empty
+  chrome/browser GN leftovers and phone keepbacks (`android.css`, iOS
+  PNGs, `android_metrics_helper`) are optional. `app/hallu.exe` is the
+  25 Nov 19:55 host (`layers` true, `append` true, HaezanGL names).
+  Stage 4 A1–A5 landed in `bin/`
+  ([`stage-4-webgpu-present.md`](stage-4-webgpu-present.md)). Stage 4 B
+  copy is done. Next for Stage 4 is C only if asked.
 - **Blocked on:** nothing for launch
+
+## Stages
+
+| Stage | What | Doc |
+|---|---|---|
+| 3 (current) | Cut linked-but-unused objects, rebuild `hallu.exe` | [`stage-3-shrink-hallu-exe/`](stage-3-shrink-hallu-exe/linked-into-hallu-exe-but-unused-by-hallu.md) |
+| 4 (planned) | One WebGPU present; no per-canvas swapchains; HDC glass is a pass | [`stage-4-webgpu-present.md`](stage-4-webgpu-present.md) |
 
 ## Paths
 
@@ -163,5 +189,7 @@ After every tool batch that finishes a step:
 1. Update **Status** (`Current phase`, `Last done`, `Next action`).
 2. If the chat is summarized, the next agent reads this file before doing
    anything else to hallulium.
-3. Do not start RAM optimization until Status says purge phases are done and
-   the orphan engine repo exists or is explicitly deferred.
+3. Do not start engine-wide RAM optimization until Status says purge phases
+   are done and the orphan engine repo exists or is explicitly deferred.
+   Stage 4 is GPU **present** cost in Hallu (`bin/` first). It is not that
+   RAM pass. A host mailbox (HaezanGL) is still a ≤ 2 day hallulium bet.
